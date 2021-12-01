@@ -50,13 +50,13 @@ In this example, there are `7` measurements that are larger than the previous me
 
 Your puzzle answer was `1226`.
 
-##--- Part Two ---
+## --- Part Two ---
 
 Considering every single measurement isn't as useful as you expected: there's just too much noise in the data.
 
 Instead, consider sums of a *three-measurement sliding window*. Again considering the above example:
 
-````
+```
 199  A      
 200  A B    
 208  A B C  
