@@ -3,17 +3,12 @@ def main():
 	lines = f.readlines()
 	f.close()
 	template = []
-	insertion = []
+	insertion = {}
 	for line in lines:
 		line = line[:-1]
 		if "->" in line:
 			line = line.split(" -> ")
-			line.append(line[1])
-			one = list(line[0])[0]
-			two = list(line[0])[1]
-			line[0] = one
-			line[1] = two
-			insertion.append(line)
+			insertion[line[0]] = line[1]
 		elif line != "":
 			template = list(line)
 	template_bis = template.copy()
@@ -23,9 +18,9 @@ def main():
 		copy = template.copy()
 		i = 1
 		for x in range(0, len(copy) - 1):
-			for insert in insertion:
-				if insert[0] == copy[x] and insert[1] == copy[x + 1]:
-					template.insert(i, insert[2])
+			for key in insertion:
+				if list(key)[0] == copy[x] and list(key)[1] == copy[x + 1]:
+					template.insert(i, insertion[key])
 					i += 1
 			i += 1
 		step += 1
@@ -54,10 +49,40 @@ def main():
 		else:
 			double[template[x] + template[x + 1]] += 1
 	step = 0
-	#while step < 10:
-	#	
-	print(double)
-#	print(insertion)
+	while step < 40:
+		new = {}
+		for key in double:
+			if list(key)[0] + insertion[key] in new:
+				new[list(key)[0] + insertion[key]] += double[key]
+			else:
+				new[list(key)[0] + insertion[key]] = double[key]
+			if insertion[key] + list(key)[1] in new:
+				new[insertion[key] + list(key)[1]] += double[key]
+			else:
+				new[insertion[key] + list(key)[1]] = double[key]
+		double = new
+		step += 1
+	letters = {}
+	for key in double:
+		if list(key)[0] in letters:
+			letters[list(key)[0]] += double[key]
+		else:
+			letters[list(key)[0]] = double[key]
+		if list(key)[1] in letters:
+			letters[list(key)[1]] += double[key]
+		else:
+			letters[list(key)[1]] = double[key]
+	for letter in letters:
+		letters[letter] /= 2
+	min_el = 99999999999999999999999
+	max_el = 0
+	for letter in letters:
+		if letters[letter] < min_el:
+			min_el = letters[letter]
+		if letters[letter] > max_el:
+			max_el = letters[letter]
+	print("--- Part Two ---")
+	print("Result:", int(max_el - min_el))
 
 if __name__ == "__main__":
 	main()
