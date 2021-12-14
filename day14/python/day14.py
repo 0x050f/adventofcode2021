@@ -47,6 +47,16 @@ def main():
 	print("Result:", max_el - min_el)
 	template = template_bis
 	print("Template:", template)
+	double = {}
+	for x in range(0, len(template) - 1):
+		if template[x] + template[x + 1] not in double:
+			double[template[x] + template[x + 1]] = 1
+		else:
+			double[template[x] + template[x + 1]] += 1
+	step = 0
+	#while step < 10:
+	#	
+	print(double)
 #	print(insertion)
 
 if __name__ == "__main__":
