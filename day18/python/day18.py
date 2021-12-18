@@ -32,8 +32,8 @@ def explode(number, i): # [3,2]
 	for n  in range(0, 4):
 		number.pop(i)
 	number[i] = 0
-	print("after explode: ", end="")
-	print_number(number)
+#	print("after explode: ", end="")
+#	print_number(number)
 
 def split(number, i):
 	nb = number[i]
@@ -45,8 +45,8 @@ def split(number, i):
 	number.insert(i, to_insert)
 	number.insert(i, "[")
 	number.pop(i + 5)
-	print("after split: ", end="")
-	print_number(number)
+#	print("after split: ", end="")
+#	print_number(number)
 
 def check_for_explode(number):
 	nested_bracket = 0
@@ -73,6 +73,12 @@ def reduce_number(number):
 			check_for_explode(number)
 		i += 1
 
+def addition(number, add):
+	number.insert(0, "[")
+	number.append(",")
+	number += add
+	number.append("]")
+
 def print_number(number):
 	print(''.join(map(str, number)))
 
@@ -96,19 +102,32 @@ def main():
 		for i in range(0, len(array[j])):
 			if array[j][i].isdigit():
 				array[j][i] = int(array[j][i])
-	number = array[0]
+	number = array[0].copy()
 	for j in range(1, len(array)):
-		print_number(number)
-		number.insert(0, "[")
-		number.append(",")
-		number += array[j]
-		number.append("]")
-		print("after addition: ", end="")
-		print_number(number)
+		addition(number, array[j].copy())
+#		print("after addition: ", end="")
+#		print_number(number)
 		reduce_number(number)
 	magnitude = calculate_magnitude(ast.literal_eval(''.join(map(str, number))))
 	print("--- Part One ---")
 	print("Magnitude:", magnitude)
+	max_magnitude = 0
+	for j in range(0, len(array)):
+		for i in range(j + 1, len(array)):
+			number = array[j].copy()
+			addition(number, array[i].copy())
+			reduce_number(number)
+			magnitude = calculate_magnitude(ast.literal_eval(''.join(map(str, number))))
+			if magnitude > max_magnitude:
+				max_magnitude = magnitude
+			number = array[i].copy()
+			addition(number, array[j].copy())
+			reduce_number(number)
+			magnitude = calculate_magnitude(ast.literal_eval(''.join(map(str, number))))
+			if magnitude > max_magnitude:
+				max_magnitude = magnitude
+	print("--- Part Two ---")
+	print("Magnitude:", max_magnitude)
 
 if __name__ == "__main__":
 	main()
